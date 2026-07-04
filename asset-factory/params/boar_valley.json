@@ -1,0 +1,9 @@
+{
+  "generator": "beast_boar",
+  "name": "boar_valley",
+  "seed": 9300,
+  "variants": 2,
+  "params": {
+    "tri_budget": 320
+  }
+}

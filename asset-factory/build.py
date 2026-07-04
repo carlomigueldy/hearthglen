@@ -146,6 +146,10 @@ def export_glb(objects, filepath):
 def turntable(render_ob, out_prefix):
     # Cycles CPU: works headless without a GL context (WSL2-friendly)
     scene = bpy.context.scene
+    # QA renders show only the render mesh — not colliders/LODs
+    for ob in scene.collection.objects:
+        if ob.type == "MESH":
+            ob.hide_render = ob is not render_ob
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
     scene.cycles.samples = 16

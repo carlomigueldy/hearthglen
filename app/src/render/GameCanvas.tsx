@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { Physics } from '@react-three/rapier'
 import { Suspense } from 'react'
 import { WebGPURenderer } from 'three/webgpu'
+import { Boars } from '../enemies/Boars'
 import { PlayerController } from '../player/PlayerController'
 import { Valley } from '../world/Valley'
 import { paletteHex } from './paletteMaterial'
@@ -30,6 +31,7 @@ export function GameCanvas() {
       <Suspense fallback={null}>
         <Physics timeStep={1 / 60}>
           <Valley />
+          <Boars />
           <PlayerController />
         </Physics>
       </Suspense>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CapabilityGate } from './render/CapabilityGate'
 import { GameCanvas } from './render/GameCanvas'
+import { Hud } from './ui/Hud'
 
 function PointerHint() {
   const [locked, setLocked] = useState(false)
@@ -34,6 +35,7 @@ export function App() {
     <div style={{ position: 'relative', height: '100%' }}>
       <CapabilityGate>
         <GameCanvas />
+        <Hud />
         <PointerHint />
       </CapabilityGate>
     </div>
