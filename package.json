@@ -1,0 +1,17 @@
+{
+  "name": "hearthglen",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A cozy fantasy open-world survival-crafting game for the web",
+  "license": "MIT",
+  "author": "Carlo Miguel Dy",
+  "packageManager": "pnpm@11.2.2",
+  "scripts": {
+    "dev": "pnpm --dir app dev",
+    "build": "pnpm --dir app build",
+    "preview": "pnpm --dir app preview",
+    "typecheck": "pnpm --dir app typecheck",
+    "lint": "pnpm --dir app lint",
+    "test": "pnpm --dir app test"
+  }
+}

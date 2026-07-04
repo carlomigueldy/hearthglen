@@ -1,0 +1,17 @@
+# deps / build
+node_modules/
+dist/
+coverage/
+
+# vercel
+.vercel/
+
+# asset factory outputs (rebuilt from source)
+asset-factory/exports/
+asset-factory/review/
+__pycache__/
+*.blend1
+
+# misc
+.DS_Store
+*.log
