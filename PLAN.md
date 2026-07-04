@@ -5,7 +5,7 @@
 
 **Stack:** React + Vite + React Three Fiber (three.js) + TypeGPU (WebGPU) + Rapier.js (WASM physics)
 **Asset factory:** Blender (headless, LTS) + bpy generator scripts → glTF
-**Status:** Planning — pre-slice-0
+**Status:** In development — M0 (pipeline) ✓ · M1 (feel) ✓ · M2 (minute loop) core ✓ — see [docs/superpowers/specs/2026-07-04-hearthglen-v1-design.md](docs/superpowers/specs/2026-07-04-hearthglen-v1-design.md) for the v1.0 ladder
 
 ---
 
