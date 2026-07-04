@@ -14,6 +14,7 @@ export interface EnemyHandle {
 export interface PlayerHandle {
   getPosition: () => Vector3
   takeDamage: (amount: number, fromDir: Vector3) => void
+  heal: (amount: number) => void
 }
 
 const enemies = new Map<number, EnemyHandle>()

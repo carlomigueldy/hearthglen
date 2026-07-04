@@ -13,6 +13,8 @@ export interface InputState {
   jump: boolean
   sprint: boolean
   dodge: boolean
+  interact: boolean
+  eat: boolean
 }
 
 const BINDINGS: Record<string, keyof InputState> = {
@@ -28,6 +30,8 @@ const BINDINGS: Record<string, keyof InputState> = {
   ShiftLeft: 'sprint',
   ShiftRight: 'sprint',
   KeyC: 'dodge',
+  KeyE: 'interact',
+  KeyQ: 'eat',
 }
 
 export function useKeyboardInput() {
@@ -39,6 +43,8 @@ export function useKeyboardInput() {
     jump: false,
     sprint: false,
     dodge: false,
+    interact: false,
+    eat: false,
   })
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { RigidBody, type RapierRigidBody } from '@react-three/rapier'
 import { useEffect, useMemo, useRef } from 'react'
 import { Group, MeshLambertMaterial, Vector3 } from 'three'
 import { combatBus } from '../game/combatBus'
+import { harvestBus } from '../game/harvestBus'
 import { useVariantAsset } from '../render/useVariantAsset'
 import { createRng, rngRange } from '../world/rng'
 import { WORLD_SEED } from '../world/Valley'
@@ -83,7 +84,11 @@ function Boar({ variant, x, z, seed }: { variant: number; x: number; z: number; 
         s.health -= damage
         s.flashUntil = s.clock + 0.12
         s.brain = s.health <= 0 ? { kind: 'dead' } : hitBoar(s.brain, s.clock)
-        if (s.brain.kind === 'dead') s.deadAt = s.clock
+        if (s.brain.kind === 'dead') {
+          s.deadAt = s.clock
+          const t = bodyRef.current?.translation()
+          if (t) harvestBus.spawnPickup('raw_meat', 2, new Vector3(t.x, 0.5, t.z))
+        }
         bodyRef.current?.applyImpulse(
           { x: fromDir.x * KNOCK, y: 1.2, z: fromDir.z * KNOCK },
           true,

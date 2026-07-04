@@ -3,6 +3,7 @@ import type { RapierRigidBody } from '@react-three/rapier'
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react'
 import { Group, Vector3 } from 'three'
 import { combatBus } from '../game/combatBus'
+import { harvestBus } from '../game/harvestBus'
 import { drainStamina, hasStamina, STAMINA_COSTS, type StaminaState } from './stamina'
 
 const WINDUP = 0.14
@@ -86,6 +87,32 @@ export function useAttack(sim: MutableRefObject<SimRef>): AttackApi {
         if (connected) {
           combatBus.triggerHitStop(HIT_STOP, now)
           s.shake = Math.max(s.shake, 0.14)
+        }
+
+        // chop/mine: nearest live harvestable inside the swing arc
+        const groups = harvestBus.getGroups()
+        let best: { group: (typeof groups)[number]; index: number; dist: number } | null = null
+        for (const group of groups) {
+          for (let i = 0; i < group.count; i++) {
+            const pos = group.positionOf(i)
+            if (!pos) continue
+            const dx = pos.x - origin.x
+            const dz = pos.z - origin.z
+            const dist = Math.hypot(dx, dz)
+            if (dist > RANGE || dist < 1e-3) continue
+            if ((dx / dist) * facing.x + (dz / dist) * facing.z < ARC_COS) continue
+            if (!best || dist < best.dist) best = { group, index: i, dist }
+          }
+        }
+        if (best) {
+          const drop = best.group.damage(best.index)
+          const pos = { x: origin.x + facing.x * best.dist, z: origin.z + facing.z * best.dist }
+          if (drop) {
+            const at = best.group.positionOf(best.index) ?? pos
+            harvestBus.spawnPickup(drop.item, drop.count, new Vector3(at.x, 0.5, at.z))
+          }
+          combatBus.triggerHitStop(0.04, now)
+          s.shake = Math.max(s.shake, 0.08)
         }
       },
     }

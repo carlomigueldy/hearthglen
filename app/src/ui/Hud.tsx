@@ -49,6 +49,79 @@ export function Hud() {
   )
 }
 
+const ITEM_ICONS: Record<string, string> = {
+  wood: '🪵',
+  stone: '🪨',
+  raw_meat: '🥩',
+  cooked_meat: '🍖',
+}
+
+/** Inventory chips (bottom-right) + contextual action prompts (bottom-center). */
+export function InventoryHud() {
+  const inventory = useGameStore((s) => s.inventory)
+  const nearFire = useGameStore((s) => s.nearFire)
+  const warm = useGameStore((s) => s.warm)
+
+  const count = (item: string) => inventory.stacks.find((s) => s.item === item)?.count ?? 0
+  const prompts: string[] = []
+  if (nearFire && count('raw_meat') > 0) prompts.push('E — cook meat')
+  if (!nearFire && count('wood') >= 5 && count('stone') >= 2) prompts.push('E — build campfire (5🪵 2🪨)')
+  if (count('cooked_meat') > 0) prompts.push('Q — eat')
+
+  const chipStyle = {
+    background: 'rgba(26, 22, 20, 0.55)',
+    borderRadius: 10,
+    padding: '5px 10px',
+    color: paletteHex('cream'),
+    fontSize: 14,
+    fontFamily: 'Georgia, serif',
+  } as const
+
+  return (
+    <>
+      {inventory.stacks.length > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            right: 24,
+            bottom: 20,
+            display: 'flex',
+            gap: 6,
+            pointerEvents: 'none',
+          }}
+        >
+          {warm && <div style={chipStyle}>🔥</div>}
+          {inventory.stacks.map((s) => (
+            <div key={s.item} style={chipStyle}>
+              {ITEM_ICONS[s.item] ?? s.item} {s.count}
+            </div>
+          ))}
+        </div>
+      )}
+      {prompts.length > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 64,
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 10,
+            pointerEvents: 'none',
+          }}
+        >
+          {prompts.map((p) => (
+            <div key={p} style={{ ...chipStyle, fontSize: 13, opacity: 0.9 }}>
+              {p}
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
+
 function Bar({ value, max, color, label }: { value: number; max: number; color: string; label: string }) {
   const pct = Math.max(0, Math.min(1, value / max))
   return (

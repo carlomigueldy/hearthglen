@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useGameStore } from './game/store'
 import { CapabilityGate } from './render/CapabilityGate'
 import { GameCanvas } from './render/GameCanvas'
-import { Hud } from './ui/Hud'
+import { AutoSave } from './save/AutoSave'
+import { loadGame } from './save/persistence'
+import { setLoadedSpawn } from './save/session'
+import { Hud, InventoryHud } from './ui/Hud'
 
 function PointerHint() {
   const [locked, setLocked] = useState(false)
@@ -31,12 +35,34 @@ function PointerHint() {
 }
 
 export function App() {
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    void loadGame()
+      .then((save) => {
+        if (save) {
+          setLoadedSpawn(save.playerPos)
+          useGameStore.getState().hydrate({
+            inventory: save.inventory,
+            harvested: save.harvested,
+            campfires: save.campfires,
+          })
+        }
+      })
+      .catch(() => {}) // a broken save should never block a new journey
+      .finally(() => setLoaded(true))
+  }, [])
+
+  if (!loaded) return null
+
   return (
     <div style={{ position: 'relative', height: '100%' }}>
       <CapabilityGate>
         <GameCanvas />
         <Hud />
+        <InventoryHud />
         <PointerHint />
+        <AutoSave />
       </CapabilityGate>
     </div>
   )

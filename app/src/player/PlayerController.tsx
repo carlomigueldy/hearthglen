@@ -12,6 +12,7 @@ import type Rapier from '@dimforge/rapier3d-compat'
 import { combatBus } from '../game/combatBus'
 import { useGameStore } from '../game/store'
 import { useKeyboardInput } from '../input/keyboard'
+import { getLoadedSpawn } from '../save/session'
 import { paletteHex } from '../render/paletteMaterial'
 import { AxeSwing, useAttack } from './useAttack'
 import { createStamina, drainStamina, hasStamina, tickStamina, STAMINA_COSTS } from './stamina'
@@ -74,6 +75,9 @@ export function PlayerController() {
       getPosition: () => {
         const t = bodyRef.current?.translation()
         return t ? new Vector3(t.x, t.y, t.z) : new Vector3()
+      },
+      heal: (amount) => {
+        s.health = Math.min(100, s.health + amount)
       },
       takeDamage: (amount, fromDir) => {
         if (s.clock < s.invulnUntil || s.clock < s.dodgeUntil) return
@@ -184,9 +188,16 @@ export function PlayerController() {
     s.stamina = tickStamina(s.stamina, dt, now)
     attack.step(now, body)
 
-    useGameStore.getState().setVitals({
+    // hearth warmth: gentle regen near a lit campfire (comfort, not pressure)
+    const store = useGameStore.getState()
+    const warm = store.campfires.some((f) => Math.hypot(f.x - pos.x, f.z - pos.z) < 3.2)
+    if (warm) s.health = Math.min(100, s.health + 2.5 * dt)
+
+    store.setVitals({
       health: s.health,
       stamina: s.stamina.current,
+      warm,
+      nearFire: warm,
       inCombat: attack.isAttacking(now) || combatBus.getEnemies().some((e) => e.isAlive()
         && e.getPosition().distanceTo(new Vector3(pos.x, pos.y, pos.z)) < 14),
     })
@@ -219,7 +230,7 @@ export function PlayerController() {
         ref={bodyRef}
         type="kinematicPosition"
         colliders={false}
-        position={[0, CAPSULE_HALF_HEIGHT + CAPSULE_RADIUS + 0.2, 0]}
+        position={getLoadedSpawn() ?? [0, CAPSULE_HALF_HEIGHT + CAPSULE_RADIUS + 0.2, 0]}
         enabledRotations={[false, false, false]}
       >
         <CapsuleCollider args={[CAPSULE_HALF_HEIGHT, CAPSULE_RADIUS]} />

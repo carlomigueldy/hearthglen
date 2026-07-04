@@ -47,10 +47,10 @@ export function Valley() {
         </mesh>
       </RigidBody>
       {pineGroups.map((placements, i) => (
-        <AssetInstances key={`pine_${i}`} name={`pine_valley_${i}`} placements={placements} />
+        <AssetInstances key={`pine_${i}`} name={`pine_valley_${i}`} placements={placements} kind="tree" />
       ))}
       {rockGroups.map((placements, i) => (
-        <AssetInstances key={`rock_${i}`} name={`rock_valley_${i}`} placements={placements} />
+        <AssetInstances key={`rock_${i}`} name={`rock_valley_${i}`} placements={placements} kind="rock" />
       ))}
     </>
   )

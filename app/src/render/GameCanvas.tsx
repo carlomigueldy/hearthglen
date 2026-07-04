@@ -4,6 +4,8 @@ import { Suspense } from 'react'
 import { WebGPURenderer } from 'three/webgpu'
 import { Boars } from '../enemies/Boars'
 import { PlayerController } from '../player/PlayerController'
+import { Campfires } from '../world/Campfires'
+import { Pickups } from '../world/Pickups'
 import { Valley } from '../world/Valley'
 import { paletteHex } from './paletteMaterial'
 
@@ -32,6 +34,8 @@ export function GameCanvas() {
         <Physics timeStep={1 / 60}>
           <Valley />
           <Boars />
+          <Pickups />
+          <Campfires />
           <PlayerController />
         </Physics>
       </Suspense>
