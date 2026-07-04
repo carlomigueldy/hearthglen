@@ -1,0 +1,13 @@
+{
+  "generator": "rock",
+  "name": "rock_valley",
+  "seed": 4200,
+  "variants": 4,
+  "params": {
+    "subdivisions": 2,
+    "radius": 1.0,
+    "displace": 0.28,
+    "moss_chance": 0.5,
+    "tri_budget": 320
+  }
+}

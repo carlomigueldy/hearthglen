@@ -12,6 +12,10 @@
     "preview": "pnpm --dir app preview",
     "typecheck": "pnpm --dir app typecheck",
     "lint": "pnpm --dir app lint",
-    "test": "pnpm --dir app test"
+    "test": "pnpm --dir app test",
+    "assets:build": "./scripts/build-assets.sh"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.4.1"
   }
 }

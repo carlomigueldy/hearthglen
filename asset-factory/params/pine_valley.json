@@ -1,0 +1,12 @@
+{
+  "generator": "tree_pine",
+  "name": "pine_valley",
+  "seed": 7100,
+  "variants": 4,
+  "params": {
+    "height": 5.5,
+    "height_jitter": 0.35,
+    "spread": 1.7,
+    "tri_budget": 420
+  }
+}
