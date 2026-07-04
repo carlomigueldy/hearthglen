@@ -1,2 +1,5 @@
 packages:
   - app
+allowBuilds:
+  # sharp is only used by gltf-transform for texture ops; we have no textures
+  sharp: false
